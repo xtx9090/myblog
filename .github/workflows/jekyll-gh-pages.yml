@@ -1,57 +1,44 @@
-name: Deploy Vue3 to GitHub Pages
+# Sample workflow for building and deploying a Jekyll site to GitHub Pages
+name: Deploy Jekyll with GitHub Pages dependencies preinstalled
 
-# 触发条件：推送到 main 分支 / 手动触发
 on:
+  # Runs on pushes targeting the default branch
   push:
-    branches: ["main"] # 你的主分支名（master 则改为此）
-  workflow_dispatch: # 允许手动在 Actions 页面触发
+    branches: ["main"]
 
-# 权限配置（官方要求，必须）
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read       # 读取仓库代码
-  pages: write         # 写入 Pages 部署内容
-  id-token: write      # 授权部署
+  contents: read
+  pages: write
+  id-token: write
 
-# 并发控制：避免重复部署
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # 第一步：构建 Vue 项目
+  # Build job
   build:
     runs-on: ubuntu-latest
     steps:
-      # 1. 拉取仓库代码
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
-
-      # 2. 配置 Node.js 环境（匹配你的项目 Node 版本，推荐 18+/20+）
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm" # 缓存依赖，加速构建
-
-      # 3. 安装依赖
-      - name: Install dependencies
-        run: npm install
-
-      # 4. 构建生产包
-      - name: Build Vue project
-        run: npm run build
-
-      # 5. 初始化 Pages 配置（官方步骤）
-      - name: Setup GitHub Pages
+      - name: Setup Pages
         uses: actions/configure-pages@v5
-
-      # 6. 上传构建产物（dist 目录）
-      - name: Upload build artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
         with:
-          path: ./dist # 指向 Vue 构建后的目录
+          source: ./dist/
+          destination: ./_site
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
 
-  # 第二步：部署到 GitHub Pages（依赖 build 任务完成）
+  # Deployment job
   deploy:
     environment:
       name: github-pages
@@ -61,4 +48,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 # 官方部署核心步骤
+        uses: actions/deploy-pages@v4
