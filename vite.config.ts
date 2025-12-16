@@ -5,13 +5,15 @@ import path from 'node:path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  base: '/my-blog/',
+  base: '/steve-blog/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
     }
   },
   build: {
+    outDir: 'dist', // 构建输出目录（默认 dist，无需修改）
+    emptyOutDir: true, // 构建前清空 dist
     rollupOptions: {
       output: {
         manualChunks: {
