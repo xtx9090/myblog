@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * 文章编辑页
+ * 功能：创建新文章或编辑已有文章，支持表单验证、封面预设等
+ */
+
 import { onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -9,14 +14,18 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 
+// 是否为编辑模式（根据路由参数判断）
 const isEditMode = computed(() => !!route.params.id)
+// 文章 ID（编辑模式下使用）
 const articleId = computed(() => {
   const id = route.params.id
   return id ? Number(id) : null
 })
 
+// 文章编辑器（表单管理、提交等）
 const { form, isSubmitting, loadArticle, handleSubmitAndRedirect, resetForm } = useArticleEditor()
 
+// 分类选项列表
 const categories = computed(() => [
   { key: 'dit', label: t('categories.dit') },
   { key: 'luna', label: t('categories.luna') },
@@ -25,6 +34,7 @@ const categories = computed(() => [
   { key: 'travel', label: t('categories.travel') }
 ])
 
+// 封面预设（CSS 渐变背景）
 const coverPresets = [
   'linear-gradient(135deg, #0a0f26 0%, #0c1a4d 35%, #032c5f 65%, #0c1a4d 100%)',
   'linear-gradient(135deg, #0d121f 0%, #132642 50%, #243c5a 100%)',
@@ -34,19 +44,25 @@ const coverPresets = [
   'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
 ]
 
+// 组件挂载时：编辑模式加载文章数据，新建模式重置表单
 onMounted(() => {
   if (isEditMode.value && articleId.value) {
     const article = getArticleById(articleId.value)
     if (article) {
       loadArticle(article)
     } else {
+      // 文章不存在，跳转到列表页
       router.push({ name: 'articles' })
     }
   } else {
+    // 新建模式，重置表单
     resetForm()
   }
 })
 
+/**
+ * 取消编辑，返回上一页或文章详情页
+ */
 const handleCancel = () => {
   if (isEditMode.value && articleId.value) {
     router.push({ name: 'articleDetail', params: { id: articleId.value } })

@@ -1,16 +1,25 @@
+/**
+ * 文章数据管理模块
+ * 提供文章的 CRUD 操作和本地存储功能
+ */
+
+/**
+ * 文章类型定义
+ */
 export type Article = {
-  id: number
-  title: string
-  description: string
-  content: string
-  categoryKey: string
-  tag: string
-  badge?: string
-  date: string
-  platform: string
-  cover: string
+  id: number // 文章唯一标识
+  title: string // 文章标题
+  description: string // 文章描述
+  content: string // Markdown 格式的文章内容
+  categoryKey: string // 文章分类键（dit, luna, note, art, travel）
+  tag: string // 文章标签
+  badge?: string // 可选徽章（如 "Beta", "New" 等）
+  date: string // 发布日期（YYYY-MM-DD 格式）
+  platform: string // 发布平台
+  cover: string // 封面背景（CSS 渐变或图片 URL）
 }
 
+// localStorage 存储键名
 const STORAGE_KEY = 'blog-articles'
 
 // 默认文章数据
@@ -86,7 +95,10 @@ const defaultArticles: Article[] = [
   }
 ]
 
-// 从 localStorage 加载文章数据
+/**
+ * 从 localStorage 加载文章数据
+ * @returns 文章数组，如果存储中没有数据则返回默认数据
+ */
 const loadArticlesFromStorage = (): Article[] => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
@@ -105,7 +117,10 @@ const loadArticlesFromStorage = (): Article[] => {
   return defaultArticles
 }
 
-// 保存文章数据到 localStorage
+/**
+ * 保存文章数据到 localStorage
+ * @param articles 要保存的文章数组
+ */
 const saveArticlesToStorage = (articles: Article[]) => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(articles))
@@ -114,12 +129,23 @@ const saveArticlesToStorage = (articles: Article[]) => {
   }
 }
 
-// 初始化文章数组
+// 初始化文章数组（从 localStorage 加载或使用默认数据）
 export const articles: Article[] = loadArticlesFromStorage()
 
+/**
+ * 根据 ID 获取文章
+ * @param id 文章 ID
+ * @returns 文章对象，如果不存在则返回 undefined
+ */
 export const getArticleById = (id: number) => articles.find((item) => item.id === id)
 
+/**
+ * 创建新文章
+ * @param articleData 文章数据（不包含 id，id 会自动生成）
+ * @returns 创建的文章对象
+ */
 export const createArticle = (articleData: Omit<Article, 'id'>): Article => {
+  // 生成新的 ID（当前最大 ID + 1）
   const newId = articles.length > 0 ? Math.max(...articles.map((a) => a.id)) + 1 : 1
   const newArticle: Article = {
     id: newId,
@@ -131,6 +157,13 @@ export const createArticle = (articleData: Omit<Article, 'id'>): Article => {
   return newArticle
 }
 
+/**
+ * 更新文章
+ * @param id 文章 ID
+ * @param articleData 要更新的文章数据（部分字段）
+ * @returns 更新后的文章对象
+ * @throws 如果文章不存在则抛出错误
+ */
 export const updateArticle = (id: number, articleData: Partial<Article>): Article => {
   const index = articles.findIndex((item) => item.id === id)
   if (index === -1) {
@@ -147,6 +180,11 @@ export const updateArticle = (id: number, articleData: Partial<Article>): Articl
   return updatedArticle
 }
 
+/**
+ * 删除文章
+ * @param id 文章 ID
+ * @returns 是否删除成功
+ */
 export const deleteArticle = (id: number): boolean => {
   const index = articles.findIndex((item) => item.id === id)
   if (index === -1) {
@@ -158,7 +196,10 @@ export const deleteArticle = (id: number): boolean => {
   return true
 }
 
-// 重新加载文章数据（用于从其他地方更新后同步）
+/**
+ * 重新加载文章数据（用于从其他地方更新后同步）
+ * 从 localStorage 重新加载数据并更新内存中的 articles 数组
+ */
 export const reloadArticles = () => {
   const loaded = loadArticlesFromStorage()
   articles.length = 0

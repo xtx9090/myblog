@@ -1,12 +1,23 @@
+/**
+ * 文章编辑 Composable
+ * 提供文章创建、编辑、表单验证和提交功能
+ */
+
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Article } from '@/data/articles'
 import { createArticle, updateArticle } from '@/data/articles'
 
+/**
+ * 文章编辑器 Composable
+ * @returns 表单数据、提交状态和处理函数
+ */
 export const useArticleEditor = () => {
   const router = useRouter()
+  // 提交状态：是否正在提交
   const isSubmitting = ref(false)
 
+  // 表单数据（响应式对象）
   const form = reactive<Partial<Article>>({
     title: '',
     description: '',
@@ -19,6 +30,9 @@ export const useArticleEditor = () => {
     cover: 'linear-gradient(135deg, #0a0f26 0%, #0c1a4d 35%, #032c5f 65%, #0c1a4d 100%)'
   })
 
+  /**
+   * 重置表单为初始状态
+   */
   const resetForm = () => {
     form.title = ''
     form.description = ''
@@ -31,6 +45,10 @@ export const useArticleEditor = () => {
     form.cover = 'linear-gradient(135deg, #0a0f26 0%, #0c1a4d 35%, #032c5f 65%, #0c1a4d 100%)'
   }
 
+  /**
+   * 加载文章数据到表单
+   * @param article 要加载的文章对象
+   */
   const loadArticle = (article: Article) => {
     form.id = article.id
     form.title = article.title
@@ -44,6 +62,10 @@ export const useArticleEditor = () => {
     form.cover = article.cover
   }
 
+  /**
+   * 验证表单数据
+   * @returns 验证是否通过
+   */
   const validateForm = (): boolean => {
     if (!form.title?.trim()) return false
     if (!form.description?.trim()) return false
@@ -56,6 +78,10 @@ export const useArticleEditor = () => {
     return true
   }
 
+  /**
+   * 提交表单（创建或更新文章）
+   * @returns 保存的文章对象，如果验证失败则返回 null
+   */
   const handleSubmit = async (): Promise<Article | null> => {
     if (!validateForm()) {
       return null
@@ -77,6 +103,9 @@ export const useArticleEditor = () => {
     }
   }
 
+  /**
+   * 提交表单并重定向到文章详情页
+   */
   const handleSubmitAndRedirect = async () => {
     const article = await handleSubmit()
     if (article) {

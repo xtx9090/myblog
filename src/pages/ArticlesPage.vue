@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * 文章列表页
+ * 功能：文章列表展示、分类筛选、搜索、排序、新建文章
+ */
+
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -8,11 +13,15 @@ import { useArticleSearch } from '@/composables/useArticleSearch'
 const { t } = useI18n()
 const router = useRouter()
 
+/**
+ * 分类选项类型
+ */
 type CategoryOption = {
-  key: string
-  label: string
+  key: string // 分类键
+  label: string // 分类标签（国际化）
 }
 
+// 分类列表（包含"全部"选项）
 const categories = computed<CategoryOption[]>(() => [
   { key: 'all', label: t('categories.all') },
   { key: 'dit', label: t('categories.dit') },
@@ -22,21 +31,33 @@ const categories = computed<CategoryOption[]>(() => [
   { key: 'travel', label: t('categories.travel') }
 ])
 
+// 当前选中的分类（默认为"全部"）
 const selectedCategory = ref('all')
+// 排序方向（true: 降序，false: 升序）
 const sortDesc = ref(true)
 
 // 搜索功能
 const { searchQuery, searchResults, highlightedResults } = useArticleSearch(articles)
 
+/**
+ * 跳转到文章详情页
+ * @param id 文章 ID
+ */
 const goDetail = (id: number) => {
   router.push({ name: 'articleDetail', params: { id } })
 }
 
+/**
+ * 跳转到新建文章页
+ */
 const goNewArticle = () => {
   router.push({ name: 'articleNew' })
 }
 
-// 结合搜索和分类筛选
+/**
+ * 过滤后的文章列表（结合搜索和分类筛选）
+ * 先应用搜索，再应用分类筛选，最后排序
+ */
 const filteredArticles = computed(() => {
   // 先应用搜索
   let matched = searchResults.value
@@ -53,7 +74,10 @@ const filteredArticles = computed(() => {
   })
 })
 
-// 获取高亮后的文章（用于显示）
+/**
+ * 显示用的文章列表（带高亮）
+ * 如果有关键词搜索，则使用高亮结果；否则使用普通结果
+ */
 const displayArticles = computed(() => {
   const query = searchQuery.value.trim()
   if (!query) return filteredArticles.value
@@ -70,6 +94,9 @@ const displayArticles = computed(() => {
   })
 })
 
+/**
+ * 切换排序方向（升序/降序）
+ */
 const toggleSort = () => {
   sortDesc.value = !sortDesc.value
 }
