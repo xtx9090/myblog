@@ -38,9 +38,21 @@
 
 ### 环境要求
 
-- Node.js ≥ 18.0.0（推荐 18.16.0 LTS）
-- npm/yarn/pnpm（推荐 pnpm，提升依赖安装速度）
-- 浏览器支持：Chrome 90+、Firefox 88+、Edge 90+、Safari 15+
+- **Node.js** ≥ 18.0.0（推荐 18.16.0 LTS 或更高版本）
+- **包管理器**：npm/yarn/pnpm（推荐 pnpm，提升依赖安装速度）
+- **浏览器支持**：Chrome 90+、Firefox 88+、Edge 90+、Safari 15+
+- **操作系统**：Windows 10+、macOS 10.15+、Linux（Ubuntu 18.04+）
+
+### 本机运行环境
+
+本项目在以下环境中测试通过：
+
+- **Node.js**: v20.19.5
+- **npm**: 10.8.2
+- **操作系统**: Linux (Ubuntu/Debian)
+- **浏览器**: Chrome 120+, Firefox 121+, Edge 120+
+
+> 💡 **提示**：如果使用其他 Node.js 版本，建议使用 [nvm](https://github.com/nvm-sh/nvm) 或 [fnm](https://github.com/Schniz/fnm) 进行版本管理。
 
 ### 安装依赖
 
@@ -78,6 +90,28 @@ pnpm build
 # 预览生产构建（验证构建结果）
 pnpm preview
 ```
+
+### 运行效果
+
+启动开发服务器后，你可以访问以下页面查看效果：
+
+- **首页** (`http://localhost:5173/home`) - 展示个人介绍、技能、项目、教育经历等
+- **文章列表** (`http://localhost:5173/articles`) - 文章列表、分类筛选、搜索功能
+- **文章详情** (`http://localhost:5173/articles/:id`) - 文章内容展示、目录导航、评论功能
+- **联系页** (`http://localhost:5173/contact`) - 联系方式展示
+
+**运行效果截图说明：**
+
+1. **首页效果**：包含打字机动画、技能展示、项目卡片、教育经历等
+2. **文章列表**：支持分类筛选、搜索高亮、排序功能
+3. **文章详情**：Markdown 渲染、代码高亮、数学公式、图表支持
+4. **响应式设计**：适配桌面端和移动端
+
+> 📸 **提示**：运行 `pnpm dev` 后，可以在浏览器中截图保存运行效果。建议截图以下页面：
+> - 首页（展示动画效果）
+> - 文章列表页（展示筛选和搜索）
+> - 文章详情页（展示 Markdown 渲染效果）
+> - 移动端响应式效果
 
 ## 📖 核心功能使用
 
@@ -154,6 +188,116 @@ cover: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
 - 创建文章：访问 `/articles/new` 或点击"新建文章"按钮，创建后保存为 Markdown 文件
 - 编辑文章：在文章详情页点击"编辑"按钮，或访问 `/articles/:id/edit`，编辑后更新 Markdown 文件
 - 文章以 Markdown 文件形式存储在 `content/` 目录下
+
+### 如何将 Markdown 文档显示在博客系统中
+
+#### 方法一：直接复制 Markdown 文件（推荐）
+
+1. **准备 Markdown 文件**
+   - 将你的 Markdown 文件准备好（可以包含 frontmatter 或纯 Markdown 内容）
+
+2. **复制到 content 目录**
+   ```bash
+   # 将你的 .md 文件复制到项目的 content/ 目录
+   cp /path/to/your/article.md ./content/
+   
+   # 或者手动将文件复制到 content/ 目录
+   ```
+
+3. **添加 Frontmatter（可选但推荐）**
+   
+   在文件开头添加 YAML frontmatter：
+   ```markdown
+   ---
+   title: 你的文章标题
+   description: 文章描述
+   categoryKey: c/c++
+   tag: 标签
+   date: 2025-12-17
+   platform: Wechat
+   cover: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+   ---
+   
+   # 你的文章内容
+   
+   这里是 Markdown 内容...
+   ```
+
+4. **重启开发服务器**
+   ```bash
+   # 如果开发服务器正在运行，需要重启以加载新文章
+   # 按 Ctrl+C 停止，然后重新运行
+   pnpm dev
+   ```
+
+5. **查看效果**
+   - 访问 `http://localhost:5173/articles` 查看文章列表
+   - 点击文章查看详情页
+
+#### 方法二：使用文章编辑页面创建
+
+1. **访问新建文章页面**
+   - 启动开发服务器后，访问 `http://localhost:5173/articles/new`
+   - 或点击文章列表页的"新建文章"按钮
+
+2. **填写文章信息**
+   - 填写标题、描述、分类、标签、日期等信息
+   - 选择或上传封面图片
+   - 在内容区域输入或粘贴 Markdown 内容
+
+3. **保存文章**
+   - 点击"发布"按钮
+   - 系统会自动将文章保存为 Markdown 文件到 `content/` 目录
+   - 文件名格式：`YYYY-MM-DD-title.md`
+
+4. **效果截图**
+
+以下是博客系统的运行效果截图：
+
+#### 首页 (Home Page)
+![首页效果](./image/home.png)
+
+首页展示个人介绍、技能、项目经历和教育背景，包含打字机动画、滚动触发动画等交互效果。
+
+#### 文章列表页 (Articles Page)
+![文章列表页效果](./image/articles.png)
+
+文章列表页支持分类筛选、搜索高亮、排序等功能，展示所有文章的卡片式布局。
+
+#### 文章详情页 (Article Detail Page)
+![文章详情页效果](./image/detail.png)
+
+文章详情页展示完整的 Markdown 渲染内容，包括代码高亮、数学公式、图表等，右侧自动生成目录导航。
+
+#### 文章编辑页 (Article Edit Page)
+![文章编辑页效果](./image/edit.png)
+
+文章编辑页提供完整的表单编辑功能，支持封面图片上传、分类选择、内容编辑等。
+
+#### 联系页 (Contact Page)
+![联系页效果](./image/contact.png)
+
+联系页展示联系方式，包括 GitHub、微信、电话、邮箱等信息，支持国际化切换。
+
+#### 方法三：批量导入文章
+
+如果你有多个 Markdown 文件需要导入：
+
+```bash
+# 批量复制文件到 content 目录
+cp /path/to/your/articles/*.md ./content/
+
+# 或者使用 find 命令查找并复制
+find /path/to/your/articles -name "*.md" -exec cp {} ./content/ \;
+```
+
+**注意事项：**
+
+- ✅ 确保文件名不重复（系统会根据文件名生成唯一 ID）
+- ✅ 建议使用 `YYYY-MM-DD-title.md` 格式命名，便于排序和管理
+- ✅ 如果 Markdown 文件包含图片，需要将图片路径改为相对路径或使用 base64
+- ✅ 支持 GitHub Flavored Markdown (GFM) 语法
+- ✅ 支持代码块、表格、任务列表、数学公式、图表等扩展语法
 
 ### Markdown 渲染
 
@@ -493,6 +637,181 @@ steve-blog/
 - [ ] 文章版本历史
 - [ ] 图片上传到云存储（当前支持 base64）
 - [ ] 文章导入/导出功能
+
+## 🎨 如何将当前源码修改成自己的博客
+
+### 1. 克隆项目
+
+```bash
+# 克隆项目到本地
+git clone https://github.com/your-username/steve-blog.git
+cd steve-blog
+
+# 或者 Fork 到自己的 GitHub 仓库
+```
+
+### 2. 修改项目基本信息
+
+#### 修改项目名称和描述
+
+- 编辑 `package.json`：
+  ```json
+  {
+    "name": "your-blog-name",
+    "description": "你的博客描述"
+  }
+  ```
+
+#### 修改网站标题和品牌
+
+- 编辑 `src/App.vue`，修改导航栏的品牌名称：
+  ```vue
+  <span class="brand">YOUR BLOG</span>
+  ```
+
+#### 修改路由配置
+
+- 编辑 `vite.config.ts`，修改 `base` 路径（如果部署到子目录）：
+  ```typescript
+  export default defineConfig({
+    base: '/your-blog-name/',  // 修改为你的博客路径
+    // ...
+  })
+  ```
+
+### 3. 自定义首页内容
+
+#### 修改个人信息
+
+编辑 `src/pages/HomePage.vue`，修改以下内容：
+
+- **技能数据**：修改 `skills` 对象中的编程语言、协议、工具
+- **项目信息**：修改项目卡片数据（在 `src/locales/zh.json` 和 `src/locales/en.json` 中）
+- **教育经历**：修改教育卡片数据（在国际化文件中）
+
+#### 修改国际化内容
+
+编辑 `src/locales/zh.json` 和 `src/locales/en.json`：
+
+- **首页内容**：修改 `home` 部分的所有文本
+- **Hero 区域**：修改 `hero.greeting`、`hero.name`、`hero.title` 等
+- **技能分类**：修改 `home.programming`、`home.protocols`、`home.tools` 等
+- **项目信息**：修改 `home.projects` 数组中的项目数据
+- **教育经历**：修改 `home.education` 数组中的教育数据
+
+### 4. 自定义分类和标签
+
+编辑 `src/locales/zh.json` 和 `src/locales/en.json`，修改 `categories` 对象：
+
+```json
+{
+  "categories": {
+    "c/c++": "C/C++",
+    "linux": "Linux",
+    "ROS": "ROS",
+    "中间件": "中间件",
+    "apollo": "Apollo"
+    // 添加或修改你的分类
+  }
+}
+```
+
+### 5. 自定义联系信息
+
+编辑 `src/locales/zh.json` 和 `src/locales/en.json`，修改 `contact` 部分：
+
+```json
+{
+  "contact": {
+    "github": "GitHub",
+    "githubUsername": "your-username",
+    "githubUrl": "https://github.com/your-username",
+    "wechat": "微信",
+    "wechatAccount": "your-wechat",
+    "wechatUrl": "your-wechat-url",
+    "phoneNumber": "your-phone",
+    "phoneLink": "tel:your-phone",
+    "emailAddress": "your-email@example.com",
+    "emailLink": "mailto:your-email@example.com"
+  }
+}
+```
+
+### 6. 自定义主题颜色
+
+编辑 `src/style.css`，修改 CSS 变量：
+
+```css
+:root {
+  --bg: #fff;
+  --surface: #fff;
+  --text-primary: #111;
+  --brand: #111;  /* 修改品牌色 */
+  /* ... */
+}
+
+.dark {
+  --bg: #0b1221;
+  --surface: #0f172a;
+  --text-primary: #e5e7ff;
+  --brand: #e5e7ff;  /* 修改深色模式品牌色 */
+  /* ... */
+}
+```
+
+### 7. 清理示例内容
+
+1. **删除示例文章**：
+   ```bash
+   # 删除 content/ 目录下的示例文件
+   rm content/example.md
+   rm content/example1.md
+   ```
+
+2. **添加自己的文章**：
+   - 将你的 Markdown 文件复制到 `content/` 目录
+   - 参考"如何将 Markdown 文档显示在博客系统中"章节
+
+### 8. 修改部署配置
+
+#### GitHub Pages 部署
+
+编辑 `vite.config.ts`：
+
+```typescript
+export default defineConfig({
+  base: '/your-repo-name/',  // 修改为你的 GitHub 仓库名
+  // ...
+})
+```
+
+#### 其他平台部署
+
+- **Vercel/Netlify**：无需修改，会自动识别
+- **自定义域名**：修改 `base` 为 `/`
+
+### 9. 更新 README.md
+
+- 修改项目名称和描述
+- 更新作者信息
+- 更新联系方式
+- 添加你的项目特色说明
+
+### 10. 提交和部署
+
+```bash
+# 提交更改
+git add .
+git commit -m "Customize blog for personal use"
+git push origin main
+
+# 构建生产版本
+pnpm build
+
+# 部署到 GitHub Pages 或其他平台
+```
+
+**完成！** 现在你有了一个完全属于自己的博客系统。
 
 ## 🤝 贡献指南
 
