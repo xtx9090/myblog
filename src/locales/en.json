@@ -75,14 +75,14 @@
     "count": "{count} articles"
   },
   "categories": {
-    "all": "All",
-    "c/c++": "C/C++ | Programming Language",
-    "design": "Design Mode",
-    "linux": "Linux | Operating System",
-    "ROS": "ROS | Robotics",
-    "middleware": "Middleware | Middleware",
-    "apollo": "Apollo | Autonomous Driving",
-    "markdown": "Markdown | Markdown"
+    "all": "all",
+    "c/c++": "c/c++",
+    "designMode": "design mode",
+    "linux": "linux",
+    "ros": "ros robot",
+    "middleware": "middleware | Middleware",
+    "apollo": "apollo",
+    "markdown": "markdown"
   },
   "search": {
     "placeholder": "Search articles by title, content, tags...",

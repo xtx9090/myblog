@@ -76,13 +76,13 @@
   },
   "categories": {
     "all": "全部",
-    "c/c++": "C/C++ | 编程语言",
-    "设计模式": "Design Mode | 设计模式",
-    "linux": "Linux | 操作系统",
-    "ROS": "ROS | 机器人",
-    "中间件": "中间件 | 中间件",
-    "apollo": "Apollo | 自动驾驶",
-    "markdown": "Markdown | 标记语言"
+    "c/c++": "c/c++",
+    "designMode": "设计模式",
+    "linux": "linux",
+    "ros": "ros机器人",
+    "middleware": "中间件",
+    "apollo": "apollo",
+    "markdown": "markdown"
   },
   "search": {
     "placeholder": "搜索文章标题、内容、标签...",
