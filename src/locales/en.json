@@ -65,7 +65,16 @@
     "publish": "Publish",
     "update": "Update",
     "cancel": "Cancel",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "validationError": "Please fill in the following required fields:",
+    "titleRequired": "Title is required",
+    "descriptionRequired": "Description is required",
+    "contentRequired": "Content is required",
+    "categoryRequired": "Category is required",
+    "tagRequired": "Tag is required",
+    "dateRequired": "Publish date is required",
+    "platformRequired": "Platform is required",
+    "coverRequired": "Cover is required"
   }
 }
 

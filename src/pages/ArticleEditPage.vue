@@ -4,11 +4,11 @@
  * 功能：创建新文章或编辑已有文章，支持表单验证、封面预设等
  */
 
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getArticleById } from '@/data/articles'
-import { useArticleEditor } from '@/composables/useArticleEditor'
+import { useArticleEditor, type ValidationError } from '@/composables/useArticleEditor'
 
 const route = useRoute()
 const router = useRouter()
@@ -23,7 +23,12 @@ const articleId = computed(() => {
 })
 
 // 文章编辑器（表单管理、提交等）
-const { form, isSubmitting, loadArticle, handleSubmitAndRedirect, resetForm } = useArticleEditor()
+const { form, isSubmitting, loadArticle, validateForm, handleSubmitAndRedirect, resetForm } = useArticleEditor()
+
+// 验证错误信息
+const validationErrors = ref<ValidationError[]>([])
+// 是否显示错误提示
+const showErrors = ref(false)
 
 // 分类选项列表
 const categories = computed(() => [
@@ -60,6 +65,22 @@ onMounted(() => {
   }
 })
 
+// 监听表单字段变化，自动清除对应字段的错误提示
+watch(
+  () => [form.title, form.description, form.content, form.categoryKey, form.tag, form.date, form.platform, form.cover],
+  () => {
+    if (showErrors.value && validationErrors.value.length > 0) {
+      // 重新验证，只保留仍然存在的错误
+      const errors = validateForm()
+      validationErrors.value = errors
+      // 如果所有错误都已修复，隐藏错误提示
+      if (errors.length === 0) {
+        showErrors.value = false
+      }
+    }
+  }
+)
+
 /**
  * 取消编辑，返回上一页或文章详情页
  */
@@ -69,6 +90,35 @@ const handleCancel = () => {
   } else {
     router.push({ name: 'articles' })
   }
+}
+
+/**
+ * 处理表单提交（带验证提示）
+ */
+const handleSubmit = async () => {
+  // 验证表单
+  const errors = validateForm()
+  
+  if (errors.length > 0) {
+    // 有验证错误，显示错误提示
+    validationErrors.value = errors
+    showErrors.value = true
+    
+    // 滚动到第一个错误字段
+    setTimeout(() => {
+      const firstErrorField = document.querySelector('.form-error')
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }, 100)
+    
+    return
+  }
+  
+  // 验证通过，清除错误提示并提交
+  validationErrors.value = []
+  showErrors.value = false
+  await handleSubmitAndRedirect()
 }
 </script>
 
@@ -80,30 +130,52 @@ const handleCancel = () => {
     </section>
 
     <section class="edit-content">
-      <form class="article-form" @submit.prevent="handleSubmitAndRedirect">
+      <!-- 验证错误提示 -->
+      <div v-if="showErrors && validationErrors.length > 0" class="validation-errors">
+        <div class="error-header">
+          <span class="error-icon">⚠️</span>
+          <span class="error-title">{{ t('article.validationError') }}</span>
+        </div>
+        <ul class="error-list">
+          <li v-for="(error, index) in validationErrors" :key="index" class="error-item">
+            {{ t(`article.${error.message}Required`) }}
+          </li>
+        </ul>
+      </div>
+
+      <form class="article-form" @submit.prevent="handleSubmit">
         <div class="form-section">
-          <label class="form-label">
+          <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'title') }">
             {{ t('article.title') }}
-            <input v-model="form.title" type="text" :placeholder="t('article.titlePlaceholder')" />
+            <input 
+              v-model="form.title" 
+              type="text" 
+              :placeholder="t('article.titlePlaceholder')"
+              :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'title') }"
+            />
           </label>
         </div>
 
         <div class="form-section">
-          <label class="form-label">
+          <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'description') }">
             {{ t('article.description') }}
             <textarea
               v-model="form.description"
               rows="3"
               :placeholder="t('article.descriptionPlaceholder')"
+              :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'description') }"
             ></textarea>
           </label>
         </div>
 
         <div class="form-row">
           <div class="form-section">
-            <label class="form-label">
+            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'category') }">
               {{ t('article.category') }}
-              <select v-model="form.categoryKey">
+              <select 
+                v-model="form.categoryKey"
+                :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'category') }"
+              >
                 <option v-for="cat in categories" :key="cat.key" :value="cat.key">
                   {{ cat.label }}
                 </option>
@@ -112,25 +184,39 @@ const handleCancel = () => {
           </div>
 
           <div class="form-section">
-            <label class="form-label">
+            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'tag') }">
               {{ t('article.tag') }}
-              <input v-model="form.tag" type="text" :placeholder="t('article.tagPlaceholder')" />
+              <input 
+                v-model="form.tag" 
+                type="text" 
+                :placeholder="t('article.tagPlaceholder')"
+                :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'tag') }"
+              />
             </label>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-section">
-            <label class="form-label">
+            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'date') }">
               {{ t('article.date') }}
-              <input v-model="form.date" type="date" />
+              <input 
+                v-model="form.date" 
+                type="date"
+                :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'date') }"
+              />
             </label>
           </div>
 
           <div class="form-section">
-            <label class="form-label">
+            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'platform') }">
               {{ t('article.platform') }}
-              <input v-model="form.platform" type="text" :placeholder="t('article.platformPlaceholder')" />
+              <input 
+                v-model="form.platform" 
+                type="text" 
+                :placeholder="t('article.platformPlaceholder')"
+                :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'platform') }"
+              />
             </label>
           </div>
         </div>
@@ -144,9 +230,14 @@ const handleCancel = () => {
           </div>
 
           <div class="form-section">
-            <label class="form-label">
+            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'cover') }">
               {{ t('article.cover') }}
-              <input v-model="form.cover" type="text" :placeholder="t('article.coverPlaceholder')" />
+              <input 
+                v-model="form.cover" 
+                type="text" 
+                :placeholder="t('article.coverPlaceholder')"
+                :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'cover') }"
+              />
             </label>
           </div>
         </div>
@@ -168,13 +259,14 @@ const handleCancel = () => {
         </div>
 
         <div class="form-section">
-          <label class="form-label">
+          <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'content') }">
             {{ t('article.content') }}
             <textarea
               v-model="form.content"
               rows="20"
               :placeholder="t('article.contentPlaceholder')"
               class="content-textarea"
+              :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'content') }"
             ></textarea>
           </label>
           <p class="form-hint">{{ t('article.contentHint') }}</p>
@@ -266,6 +358,87 @@ const handleCancel = () => {
 
 .form-label textarea {
   resize: vertical;
+}
+
+/* 验证错误提示样式 */
+.validation-errors {
+  margin-bottom: 24px;
+  padding: 16px;
+  border-radius: 10px;
+  background: #fff5f5;
+  border: 1px solid #feb2b2;
+}
+
+.dark .validation-errors {
+  background: #4a1a1a;
+  border-color: #c53030;
+}
+
+.error-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #c53030;
+}
+
+.dark .error-header {
+  color: #ff6b6b;
+}
+
+.error-icon {
+  font-size: 20px;
+}
+
+.error-title {
+  font-size: 16px;
+}
+
+.error-list {
+  margin: 0;
+  padding-left: 24px;
+  list-style: disc;
+}
+
+.error-item {
+  margin: 6px 0;
+  color: #c53030;
+  font-size: 14px;
+}
+
+.dark .error-item {
+  color: #ff6b6b;
+}
+
+/* 表单字段错误样式 */
+.form-label.has-error {
+  color: #c53030;
+}
+
+.dark .form-label.has-error {
+  color: #ff6b6b;
+}
+
+.form-label input.form-error,
+.form-label textarea.form-error,
+.form-label select.form-error {
+  border-color: #c53030;
+  background: #fff5f5;
+}
+
+.dark .form-label input.form-error,
+.dark .form-label textarea.form-error,
+.dark .form-label select.form-error {
+  border-color: #c53030;
+  background: #4a1a1a;
+}
+
+.form-label input.form-error:focus,
+.form-label textarea.form-error:focus,
+.form-label select.form-error:focus {
+  border-color: #c53030;
+  outline: 2px solid rgba(197, 48, 48, 0.2);
 }
 
 .content-textarea {

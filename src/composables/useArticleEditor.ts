@@ -9,6 +9,14 @@ import type { Article } from '@/data/articles'
 import { createArticle, updateArticle } from '@/data/articles'
 
 /**
+ * 验证错误信息类型
+ */
+export type ValidationError = {
+  field: string // 字段名称（用于国际化）
+  message: string // 错误消息
+}
+
+/**
  * 文章编辑器 Composable
  * @returns 表单数据、提交状态和处理函数
  */
@@ -64,18 +72,37 @@ export const useArticleEditor = () => {
 
   /**
    * 验证表单数据
-   * @returns 验证是否通过
+   * @returns 验证错误数组，如果验证通过则返回空数组
    */
-  const validateForm = (): boolean => {
-    if (!form.title?.trim()) return false
-    if (!form.description?.trim()) return false
-    if (!form.content?.trim()) return false
-    if (!form.categoryKey) return false
-    if (!form.tag?.trim()) return false
-    if (!form.date) return false
-    if (!form.platform?.trim()) return false
-    if (!form.cover?.trim()) return false
-    return true
+  const validateForm = (): ValidationError[] => {
+    const errors: ValidationError[] = []
+    
+    if (!form.title?.trim()) {
+      errors.push({ field: 'title', message: 'title' })
+    }
+    if (!form.description?.trim()) {
+      errors.push({ field: 'description', message: 'description' })
+    }
+    if (!form.content?.trim()) {
+      errors.push({ field: 'content', message: 'content' })
+    }
+    if (!form.categoryKey) {
+      errors.push({ field: 'category', message: 'category' })
+    }
+    if (!form.tag?.trim()) {
+      errors.push({ field: 'tag', message: 'tag' })
+    }
+    if (!form.date) {
+      errors.push({ field: 'date', message: 'date' })
+    }
+    if (!form.platform?.trim()) {
+      errors.push({ field: 'platform', message: 'platform' })
+    }
+    if (!form.cover?.trim()) {
+      errors.push({ field: 'cover', message: 'cover' })
+    }
+    
+    return errors
   }
 
   /**
@@ -83,7 +110,8 @@ export const useArticleEditor = () => {
    * @returns 保存的文章对象，如果验证失败则返回 null
    */
   const handleSubmit = async (): Promise<Article | null> => {
-    if (!validateForm()) {
+    const errors = validateForm()
+    if (errors.length > 0) {
       return null
     }
 

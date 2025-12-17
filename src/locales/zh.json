@@ -65,7 +65,16 @@
     "publish": "发布",
     "update": "更新",
     "cancel": "取消",
-    "saving": "保存中..."
+    "saving": "保存中...",
+    "validationError": "请填写以下必填字段：",
+    "titleRequired": "标题不能为空",
+    "descriptionRequired": "描述不能为空",
+    "contentRequired": "正文内容不能为空",
+    "categoryRequired": "请选择分类",
+    "tagRequired": "标签不能为空",
+    "dateRequired": "请选择发布日期",
+    "platformRequired": "发布平台不能为空",
+    "coverRequired": "封面不能为空"
   }
 }
 
