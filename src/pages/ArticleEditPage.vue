@@ -185,9 +185,20 @@ const handleCancel = () => {
   color: var(--text-primary);
 }
 
-.edit-content {
-  max-width: 900px;
+.edit-layout .hero {
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.edit-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
 }
 
 .article-form {
@@ -232,6 +243,8 @@ const handleCancel = () => {
   font-size: 14px;
   font-family: inherit;
   transition: border-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-label input:focus,
@@ -321,13 +334,88 @@ const handleCancel = () => {
   cursor: not-allowed;
 }
 
+/* 大屏设备 (1400px 及以上) */
+@media (min-width: 1400px) {
+  .edit-layout .hero {
+    max-width: 1400px;
+    padding: 0 32px;
+  }
+
+  .edit-content {
+    max-width: 1400px;
+    padding: 0 32px;
+  }
+}
+
+/* 平板设备 (1024px 及以下) */
+@media (max-width: 1024px) {
+  .edit-layout .hero {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
+  .edit-content {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+}
+
+/* 平板设备 (768px 及以下) */
 @media (max-width: 768px) {
+  .edit-layout .hero {
+    padding: 0 16px;
+  }
+
+  .edit-content {
+    padding: 0 16px;
+  }
+
   .form-row {
     grid-template-columns: 1fr;
   }
 
   .cover-presets {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 小屏手机 (640px 及以下) */
+@media (max-width: 640px) {
+  .edit-layout .hero {
+    padding: 0 12px;
+  }
+
+  .edit-content {
+    padding: 0 12px;
+  }
+
+  .cover-presets {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+/* 超小屏手机 (480px 及以下) */
+@media (max-width: 480px) {
+  .edit-layout .hero {
+    padding: 0 10px;
+  }
+
+  .edit-content {
+    padding: 0 10px;
+  }
+
+  .cover-presets {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .cancel-btn,
+  .submit-btn {
+    width: 100%;
   }
 }
 </style>
