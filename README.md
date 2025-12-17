@@ -350,6 +350,7 @@ steve-blog/
 │   ├── i18n.ts          # 国际化配置
 │   └── style.css        # 全局样式（主题变量、布局、组件样式）
 ├── vite-plugin-copy-content.ts  # Vite 插件：构建时复制 content 目录
+├── vite-env.d.ts        # Vite 类型声明文件（@vitejs/plugin-vue 类型定义）
 ├── .eslintrc.js         # ESLint配置（代码规范）
 ├── .prettierrc.js       # Prettier配置（代码格式化）
 ├── tsconfig.json        # TypeScript配置
@@ -387,6 +388,7 @@ steve-blog/
 - 使用接口（interface）定义对象类型
 - 使用类型别名（type）定义联合类型
 - 优先使用组合式 API（Composition API）
+- 类型声明文件：项目根目录的 `vite-env.d.ts` 用于声明第三方库的类型（如 `@vitejs/plugin-vue`）
 
 ### 组件开发
 
@@ -475,6 +477,7 @@ steve-blog/
 - [x] 首页动画效果（打字机、滚动触发、数字计数等）
 - [x] 组件化重构（使用 Slot 优化代码结构）
 - [x] 代码整理和优化（提取共享工具函数）
+- [x] TypeScript 类型声明完善（修复 vite.config.ts 类型错误）
 
 ### 待实现功能
 

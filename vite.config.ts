@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-// @ts-expect-error - @vitejs/plugin-vue types are available at runtime
 import vue from '@vitejs/plugin-vue'
 import path from 'node:path'
 import { copyContentPlugin } from './vite-plugin-copy-content'
