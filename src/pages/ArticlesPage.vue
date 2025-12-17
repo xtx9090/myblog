@@ -9,27 +9,13 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { articles } from '@/data'
 import { useArticleSearch } from '@/composables/useArticleSearch'
+import { useCategories } from '@/composables/useCategories'
 
 const { t } = useI18n()
 const router = useRouter()
 
-/**
- * 分类选项类型
- */
-type CategoryOption = {
-  key: string // 分类键
-  label: string // 分类标签（国际化）
-}
-
-// 分类列表（包含"全部"选项）
-const categories = computed<CategoryOption[]>(() => [
-  { key: 'all', label: t('categories.all') },
-  { key: 'dit', label: t('categories.dit') },
-  { key: 'luna', label: t('categories.luna') },
-  { key: 'note', label: t('categories.note') },
-  { key: 'art', label: t('categories.art') },
-  { key: 'travel', label: t('categories.travel') }
-])
+// 分类列表（从国际化配置动态获取，包含"全部"选项）
+const { categories } = useCategories(true)
 
 // 当前选中的分类（默认为"全部"）
 const selectedCategory = ref('all')

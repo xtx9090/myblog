@@ -7,7 +7,7 @@ export type Article = {
   title: string // 文章标题
   description: string // 文章描述
   content: string // Markdown 格式的文章内容
-  categoryKey: string // 文章分类键（dit, luna, note, art, travel）
+  categoryKey: string // 文章分类键（c/c++, linux, ROS, 中间件, apollo）
   tag: string // 文章标签
   badge?: string // 可选徽章（如 "Beta", "New" 等）
   date: string // 发布日期（YYYY-MM-DD 格式）

@@ -61,7 +61,10 @@ export function markdownToArticle(
   const date: string = getDate()
   const description =
     frontmatter.description || extractDescription(content) || ''
-  const categoryKey = frontmatter.categoryKey || 'dit'
+  // 如果 frontmatter 中没有 categoryKey，使用第一个分类作为默认值
+  // 注意：这里不能直接使用 i18n（避免循环依赖），所以使用第一个常见分类作为备用
+  // 实际使用中，categoryKey 应该始终在 frontmatter 中指定
+  const categoryKey = frontmatter.categoryKey || 'c/c++'
   const tag = frontmatter.tag || ''
   const badge = frontmatter.badge
   const platform = frontmatter.platform || 'Wechat'

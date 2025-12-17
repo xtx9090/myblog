@@ -76,11 +76,13 @@
   },
   "categories": {
     "all": "All",
-    "dit": "DiT | Media & Course",
-    "luna": "LUNA | Imaging",
-    "note": "Notes & Misc",
-    "art": "After8 | Art Talk",
-    "travel": "Shanhai Clinic | Travel"
+    "c/c++": "C/C++ | Programming Language",
+    "design": "Design Mode",
+    "linux": "Linux | Operating System",
+    "ROS": "ROS | Robotics",
+    "中间件": "Middleware | Middleware",
+    "apollo": "Apollo | Autonomous Driving",
+    "markdown": "Markdown"
   },
   "search": {
     "placeholder": "Search articles by title, content, tags...",

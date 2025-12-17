@@ -76,11 +76,13 @@
   },
   "categories": {
     "all": "全部",
-    "dit": "DiT | 数媒与课程",
-    "luna": "LUNA | 影像相关",
-    "note": "暗叽be叽 | 杂记",
-    "art": "After8 | 聊艺术",
-    "travel": "山海疗养院 | 游记"
+    "c/c++": "C/C++ | 编程语言",
+    "设计模式": "设计模式 | 设计模式",
+    "linux": "Linux | 操作系统",
+    "ROS": "ROS | 机器人",
+    "中间件": "中间件 | 中间件",
+    "apollo": "Apollo | 自动驾驶",
+    "markdown": "Markdown"
   },
   "search": {
     "placeholder": "搜索文章标题、内容、标签...",

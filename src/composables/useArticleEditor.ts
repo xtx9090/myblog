@@ -5,6 +5,7 @@
 
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { nanoid } from 'nanoid'
 import type { Article } from '@/data/types'
 import { contentArticles } from '@/data/contentArticles'
@@ -64,17 +65,32 @@ function getFileHandleName(articleId: string): string | null {
 
 export const useArticleEditor = () => {
   const router = useRouter()
+  const { messages, locale } = useI18n()
+  
   // 提交状态：是否正在提交
   const isSubmitting = ref(false)
   // 文件保存状态
   const isSavingFile = ref(false)
+
+  /**
+   * 从国际化配置中获取默认分类键（排除 'all'）
+   */
+  const getDefaultCategoryKey = (): string => {
+    const currentMessages = messages.value[locale.value] as any
+    const categoriesConfig = currentMessages?.categories || {}
+    const categoryKeys = Object.keys(categoriesConfig).filter((key) => key !== 'all')
+    return categoryKeys.length > 0 ? categoryKeys[0] : 'c/c++' // 如果没有配置，使用备用值
+  }
+
+  // 获取默认分类键
+  const defaultCategoryKey = getDefaultCategoryKey()
 
   // 表单数据（响应式对象）
   const form = reactive<Partial<Article>>({
     title: '',
     description: '',
     content: '',
-    categoryKey: 'dit',
+    categoryKey: defaultCategoryKey,
     tag: '',
     badge: '',
     date: new Date().toISOString().split('T')[0],
@@ -89,7 +105,7 @@ export const useArticleEditor = () => {
     form.title = ''
     form.description = ''
     form.content = ''
-    form.categoryKey = 'dit'
+    form.categoryKey = defaultCategoryKey
     form.tag = ''
     form.badge = ''
     form.date = new Date().toISOString().split('T')[0]
@@ -218,7 +234,7 @@ export const useArticleEditor = () => {
         title: form.title || '',
         description: form.description || '',
         content: form.content || '',
-        categoryKey: form.categoryKey || 'dit',
+        categoryKey: form.categoryKey || defaultCategoryKey,
         tag: form.tag || '',
         badge: form.badge,
         date: (form.date || new Date().toISOString().split('T')[0]) as string,
@@ -286,7 +302,7 @@ export const useArticleEditor = () => {
         title: form.title || '',
         description: form.description || '',
         content: form.content || '',
-        categoryKey: form.categoryKey || 'dit',
+        categoryKey: form.categoryKey || defaultCategoryKey,
         tag: form.tag || '',
         badge: form.badge,
         date: (form.date || new Date().toISOString().split('T')[0]) as string,

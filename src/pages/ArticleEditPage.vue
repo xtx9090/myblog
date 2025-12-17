@@ -9,6 +9,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getArticleById } from '@/data'
 import { useArticleEditor, type ValidationError } from '@/composables/useArticleEditor'
+import { useCategories } from '@/composables/useCategories'
 
 const route = useRoute()
 const router = useRouter()
@@ -39,14 +40,8 @@ const validationErrors = ref<ValidationError[]>([])
 // 是否显示错误提示
 const showErrors = ref(false)
 
-// 分类选项列表
-const categories = computed(() => [
-  { key: 'dit', label: t('categories.dit') },
-  { key: 'luna', label: t('categories.luna') },
-  { key: 'note', label: t('categories.note') },
-  { key: 'art', label: t('categories.art') },
-  { key: 'travel', label: t('categories.travel') }
-])
+// 分类选项列表（从国际化配置动态获取，不包含"全部"选项）
+const { categories } = useCategories(false)
 
 // 封面预设（CSS 渐变背景）
 const coverPresets = [
