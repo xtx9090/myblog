@@ -79,7 +79,7 @@ export const useArticleEditor = () => {
     const currentMessages = messages.value[locale.value] as any
     const categoriesConfig = currentMessages?.categories || {}
     const categoryKeys = Object.keys(categoriesConfig).filter((key) => key !== 'all')
-    return categoryKeys.length > 0 ? categoryKeys[0] : 'c/c++' // 如果没有配置，使用备用值
+    return categoryKeys.length > 0 ? (categoryKeys[0] as string) : 'c/c++' // 如果没有配置，使用备用值
   }
 
   // 获取默认分类键

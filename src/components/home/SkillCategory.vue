@@ -42,7 +42,7 @@ onMounted(() => {
       <h3 class="category-title">{{ title }}</h3>
       <div class="skill-tags">
         <span
-          v-for="(skill, index) in skills"
+          v-for="skill in skills"
           :key="skill.name"
           ref="tagRefs"
           class="skill-tag"
