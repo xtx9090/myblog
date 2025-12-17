@@ -9,6 +9,8 @@ import 'katex/dist/katex.min.css'
 import { useCodeCopy } from '@/composables/useCodeCopy'
 import { useMermaidRenderer } from '@/composables/useMermaidRenderer'
 import { useFlowchartRenderer } from '@/composables/useFlowchartRenderer'
+// 导入工具函数
+import { getCoverStyle } from '@/utils/coverStyle'
 
 const { t } = useI18n()
 
@@ -62,7 +64,7 @@ watch(() => props.htmlContent, () => {
 
 <template>
   <article class="article-card detail-card">
-    <div class="card-cover" :style="{ background: article.cover }">
+    <div class="card-cover" :style="getCoverStyle(article.cover)">
       <span v-if="article.badge" class="badge">{{ article.badge }}</span>
     </div>
     <div class="card-body">
@@ -93,8 +95,8 @@ watch(() => props.htmlContent, () => {
 
 <style scoped>
 .detail-card {
-  grid-template-columns: 1fr;
   display: grid;
+  grid-template-columns: 1fr;
   gap: 18px;
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -102,7 +104,6 @@ watch(() => props.htmlContent, () => {
   background: var(--surface);
   box-shadow: var(--shadow);
   position: relative;
-  transform: translateY(0);
 }
 
 .detail-card .card-body {

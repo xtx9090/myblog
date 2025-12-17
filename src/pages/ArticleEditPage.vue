@@ -11,6 +11,77 @@ import { getArticleById } from '@/data'
 import { useArticleEditor, type ValidationError } from '@/composables/useArticleEditor'
 import { useCategories } from '@/composables/useCategories'
 
+// 封面图片预览
+const coverImagePreview = ref<string | null>(null)
+const coverFileInput = ref<HTMLInputElement>()
+
+/**
+ * 处理封面图片选择
+ */
+const handleCoverImageSelect = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  
+  if (file) {
+    // 验证文件类型
+    if (!file.type.startsWith('image/')) {
+      alert(t('article.coverImageError'))
+      return
+    }
+    
+    // 验证文件大小（限制为 5MB）
+    if (file.size > 5 * 1024 * 1024) {
+      alert(t('article.coverImageSizeError'))
+      return
+    }
+    
+    // 读取文件并转换为 base64
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const result = e.target?.result as string
+      if (result) {
+        coverImagePreview.value = result
+        form.cover = result
+      }
+    }
+    reader.onerror = () => {
+      alert(t('article.coverImageError'))
+    }
+    reader.readAsDataURL(file)
+  }
+}
+
+/**
+ * 清除封面图片
+ */
+const clearCoverImage = () => {
+  coverImagePreview.value = null
+  if (coverFileInput.value) {
+    coverFileInput.value.value = ''
+  }
+  form.cover = ''
+}
+
+/**
+ * 获取封面预览 URL
+ */
+const coverPreviewUrl = computed(() => {
+  // 优先使用预览值
+  if (coverImagePreview.value) {
+    return coverImagePreview.value
+  }
+  // 如果表单中的封面是图片格式，也显示预览
+  if (form.cover) {
+    const cover = form.cover.trim()
+    if (cover.startsWith('http://') || 
+        cover.startsWith('https://') || 
+        cover.startsWith('data:image/')) {
+      return cover
+    }
+  }
+  return null
+})
+
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
@@ -59,6 +130,10 @@ onMounted(() => {
     const article = getArticleById(articleId.value)
     if (article) {
       loadArticle(article)
+      // 如果封面是图片，设置预览
+      if (article.cover && (article.cover.startsWith('http://') || article.cover.startsWith('https://') || article.cover.startsWith('data:image/'))) {
+        coverImagePreview.value = article.cover
+      }
     } else {
       // 文章不存在，跳转到列表页
       router.push({ name: 'articles' })
@@ -81,6 +156,22 @@ watch(
       if (errors.length === 0) {
         showErrors.value = false
       }
+    }
+  }
+)
+
+// 监听封面变化，更新预览
+watch(
+  () => form.cover,
+  (newCover) => {
+    if (newCover && (newCover.startsWith('http://') || newCover.startsWith('https://') || newCover.startsWith('data:image/'))) {
+      // 如果是图片格式，更新预览
+      if (!coverImagePreview.value || coverImagePreview.value !== newCover) {
+        coverImagePreview.value = newCover
+      }
+    } else if (!newCover) {
+      // 如果封面被清空，清除预览
+      coverImagePreview.value = null
     }
   }
 )
@@ -255,12 +346,46 @@ const handleSubmit = async () => {
           <div class="form-section">
             <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'cover') }">
               {{ t('article.cover') }}
-              <input 
-                v-model="form.cover" 
-                type="text" 
-                :placeholder="t('article.coverPlaceholder')"
-                :class="{ 'form-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'cover') }"
-              />
+              <div class="cover-input-group">
+                <input 
+                  v-model="form.cover" 
+                  type="text" 
+                  :placeholder="t('article.coverPlaceholder')"
+                  :class="{ 'form-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'cover') }"
+                />
+                <div class="cover-actions">
+                  <button
+                    type="button"
+                    class="cover-upload-btn"
+                    @click="coverFileInput?.click()"
+                  >
+                    {{ t('article.uploadImage') }}
+                  </button>
+                  <input
+                    ref="coverFileInput"
+                    type="file"
+                    accept="image/*"
+                    style="display: none"
+                    @change="handleCoverImageSelect"
+                  />
+                  <button
+                    v-if="coverPreviewUrl"
+                    type="button"
+                    class="cover-clear-btn"
+                    @click="clearCoverImage"
+                  >
+                    {{ t('article.clearImage') }}
+                  </button>
+                </div>
+              </div>
+              <!-- 封面预览 -->
+              <div v-if="coverPreviewUrl" class="cover-preview">
+                <img 
+                  :src="coverPreviewUrl" 
+                  alt="Cover preview"
+                  @error="coverImagePreview = null"
+                />
+              </div>
             </label>
           </div>
         </div>
@@ -473,6 +598,64 @@ const handleSubmit = async () => {
   margin: 4px 0 0;
   font-size: 12px;
   color: var(--text-subtle);
+}
+
+.cover-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cover-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.cover-upload-btn,
+.cover-clear-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cover-upload-btn:hover {
+  background: var(--surface-2);
+  border-color: var(--brand);
+}
+
+.cover-clear-btn:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #dc2626;
+}
+
+.dark .cover-clear-btn:hover {
+  background: #7f1d1d;
+  border-color: #dc2626;
+  color: #fca5a5;
+}
+
+.cover-preview {
+  margin-top: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  max-width: 100%;
+}
+
+.cover-preview img {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  display: block;
 }
 
 .cover-presets {

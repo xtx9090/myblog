@@ -10,6 +10,7 @@ import { useRouter } from 'vue-router'
 import { articles } from '@/data'
 import { useArticleSearch } from '@/composables/useArticleSearch'
 import { useCategories } from '@/composables/useCategories'
+import { getCoverStyle } from '@/utils/coverStyle'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -164,7 +165,10 @@ const toggleSort = () => {
             @keyup.enter="goDetail(item.id)"
           >
             <!-- 文章徽章 -->
-            <div class="card-cover" :style="{ background: item.cover }">
+            <div 
+              class="card-cover" 
+              :style="getCoverStyle(item.cover)"
+            >
               <span v-if="item.badge" class="badge">{{ item.badge }}</span>
             </div>
 
