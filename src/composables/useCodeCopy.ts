@@ -6,20 +6,6 @@ import { nextTick, type Ref } from 'vue'
  */
 export const useCodeCopy = (contentRef: Ref<HTMLElement | undefined>) => {
   /**
-   * 复制文本到剪贴板
-   */
-  const copyToClipboard = async (text: string, button: HTMLElement): Promise<void> => {
-    try {
-      await navigator.clipboard.writeText(text)
-      showCopySuccess(button)
-    } catch (err) {
-      console.error('复制失败:', err)
-      // 降级方案：使用传统的复制方法
-      fallbackCopy(text, button)
-    }
-  }
-
-  /**
    * 显示复制成功反馈
    */
   const showCopySuccess = (button: HTMLElement): void => {
@@ -34,23 +20,37 @@ export const useCodeCopy = (contentRef: Ref<HTMLElement | undefined>) => {
   }
 
   /**
-   * 降级复制方案（使用 document.execCommand）
+   * 显示复制失败反馈
    */
-  const fallbackCopy = (text: string, button: HTMLElement): void => {
-    const textArea = document.createElement('textarea')
-    textArea.value = text
-    textArea.style.position = 'fixed'
-    textArea.style.opacity = '0'
-    document.body.appendChild(textArea)
-    textArea.select()
+  const showCopyError = (button: HTMLElement): void => {
+    const originalText = button.textContent
+    button.textContent = '复制失败'
+    button.classList.add('error')
     
+    setTimeout(() => {
+      button.textContent = originalText
+      button.classList.remove('error')
+    }, 2000)
+  }
+
+  /**
+   * 复制文本到剪贴板
+   * 使用现代的 Clipboard API，如果失败则显示错误提示
+   */
+  const copyToClipboard = async (text: string, button: HTMLElement): Promise<void> => {
+    // 检查 Clipboard API 是否可用
+    if (!navigator.clipboard || !navigator.clipboard.writeText) {
+      console.error('Clipboard API 不可用')
+      showCopyError(button)
+      return
+    }
+
     try {
-      document.execCommand('copy')
+      await navigator.clipboard.writeText(text)
       showCopySuccess(button)
-    } catch (fallbackErr) {
-      console.error('降级复制也失败:', fallbackErr)
-    } finally {
-      document.body.removeChild(textArea)
+    } catch (err) {
+      console.error('复制失败:', err)
+      showCopyError(button)
     }
   }
 

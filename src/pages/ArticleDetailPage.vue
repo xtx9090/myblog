@@ -135,7 +135,8 @@ onMounted(() => {
             @submit="handleCommentSubmit"
           />
         </div>
-
+        
+        <!-- 文章目录 -->
         <ArticleTOC :toc="rendered.toc" />
       </div>
 
