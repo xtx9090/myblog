@@ -34,10 +34,10 @@
 ## 安装依赖
 ```bash
 # 克隆项目
-git clone https://github.com/your-username/my-blog.git
+git clone https://github.com/your-username/steve-blog.git
 
 # 进入项目目录
-cd my-blog
+cd steve-blog
 
 # 安装依赖（pnpm优先）
 pnpm install
@@ -170,7 +170,7 @@ sequenceDiagram
 
 # 目录结构
 ```
-my-blog/
+steve-blog/
 ├── public/              # 静态资源（不会被Vite处理）
 │   └── favicon.ico      # 网站图标
 ├── src/
