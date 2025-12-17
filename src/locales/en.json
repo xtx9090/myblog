@@ -74,7 +74,31 @@
     "tagRequired": "Tag is required",
     "dateRequired": "Publish date is required",
     "platformRequired": "Platform is required",
-    "coverRequired": "Cover is required"
+    "coverRequired": "Cover is required",
+    "notFound": "Article not found",
+    "notFoundDesc": "Please return to the list and try again",
+    "back": "Back",
+    "prevArticle": "Previous",
+    "nextArticle": "Next"
+  },
+  "toc": {
+    "title": "Table of Contents"
+  },
+  "comments": {
+    "title": "Comments",
+    "count": "{count} comments",
+    "empty": "No comments yet. Be the first to comment!",
+    "authorLabel": "Name (optional)",
+    "authorPlaceholder": "Your name",
+    "contentLabel": "Comment",
+    "contentPlaceholder": "Write your thoughts...",
+    "submit": "Post Comment"
+  },
+  "code": {
+    "copy": "Copy",
+    "copied": "Copied!",
+    "copyFailed": "Copy failed",
+    "copyCode": "Copy code"
   }
 }
 

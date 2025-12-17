@@ -74,7 +74,31 @@
     "tagRequired": "标签不能为空",
     "dateRequired": "请选择发布日期",
     "platformRequired": "发布平台不能为空",
-    "coverRequired": "封面不能为空"
+    "coverRequired": "封面不能为空",
+    "notFound": "未找到该文章",
+    "notFoundDesc": "请返回列表重试",
+    "back": "返回",
+    "prevArticle": "上一篇",
+    "nextArticle": "下一篇"
+  },
+  "toc": {
+    "title": "目录"
+  },
+  "comments": {
+    "title": "评论",
+    "count": "{count} 条",
+    "empty": "暂无评论，快来写第一条吧。",
+    "authorLabel": "昵称（可选）",
+    "authorPlaceholder": "你的昵称",
+    "contentLabel": "评论内容",
+    "contentPlaceholder": "写下你的想法...",
+    "submit": "发布评论"
+  },
+  "code": {
+    "copy": "复制",
+    "copied": "已复制!",
+    "copyFailed": "复制失败",
+    "copyCode": "复制代码"
   }
 }
 

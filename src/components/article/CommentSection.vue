@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { CommentItem } from '@/composables/useArticleComments'
+
+const { t } = useI18n()
 
 type CommentForm = {
   author: string
@@ -36,8 +39,8 @@ const handleSubmit = () => {
 <template>
   <section class="comments">
     <header class="comments__header">
-      <h3>评论</h3>
-      <span class="comments__count">{{ comments.length }} 条</span>
+      <h3>{{ t('comments.title') }}</h3>
+      <span class="comments__count">{{ t('comments.count', { count: comments.length }) }}</span>
     </header>
     <ul v-if="comments.length" class="comments__list">
       <li v-for="item in comments" :key="item.id" class="comment">
@@ -50,27 +53,27 @@ const handleSubmit = () => {
         <p class="comment__content">{{ item.content }}</p>
       </li>
     </ul>
-    <p v-else class="comments__empty">暂无评论，快来写第一条吧。</p>
+    <p v-else class="comments__empty">{{ t('comments.empty') }}</p>
 
     <form class="comment-form" @submit.prevent="handleSubmit">
       <div class="form-row">
         <label>
-          昵称（可选）
-          <input v-model="form.author" placeholder="你的昵称" />
+          {{ t('comments.authorLabel') }}
+          <input v-model="form.author" :placeholder="t('comments.authorPlaceholder')" />
         </label>
       </div>
       <div class="form-row">
         <label>
-          评论内容
+          {{ t('comments.contentLabel') }}
           <textarea
             v-model="form.content"
             rows="4"
             required
-            placeholder="写下你的想法..."
+            :placeholder="t('comments.contentPlaceholder')"
           ></textarea>
         </label>
       </div>
-      <button class="submit-btn" type="submit">发布评论</button>
+      <button class="submit-btn" type="submit">{{ t('comments.submit') }}</button>
     </form>
   </section>
 </template>

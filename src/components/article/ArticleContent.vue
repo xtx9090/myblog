@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, watch, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { Article } from '@/data/articles'
 // 导入样式
 import 'highlight.js/styles/github-dark.css'
@@ -8,6 +9,8 @@ import 'katex/dist/katex.min.css'
 import { useCodeCopy } from '@/composables/useCodeCopy'
 import { useMermaidRenderer } from '@/composables/useMermaidRenderer'
 import { useFlowchartRenderer } from '@/composables/useFlowchartRenderer'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   article: Article
@@ -25,7 +28,15 @@ const emit = defineEmits<{
 const contentBlockRef = ref<HTMLElement>()
 
 // 使用 composables
-const { addCopyButtons } = useCodeCopy(contentBlockRef)
+const { addCopyButtons } = useCodeCopy(contentBlockRef, (key: string) => {
+  const translations: Record<string, string> = {
+    'copy': t('code.copy'),
+    'copied': t('code.copied'),
+    'copyFailed': t('code.copyFailed'),
+    'copyCode': t('code.copyCode')
+  }
+  return translations[key] || key
+})
 const { initMermaid } = useMermaidRenderer(contentBlockRef)
 const { initFlowchart } = useFlowchartRenderer(contentBlockRef)
 
@@ -69,10 +80,10 @@ watch(() => props.htmlContent, () => {
       </div>
       <div class="nav-row">
         <button class="ghost-btn" type="button" :disabled="!prevArticle" @click="emit('goPrev')">
-          ← 上一篇
+          ← {{ t('article.prevArticle') }}
         </button>
         <button class="ghost-btn" type="button" :disabled="!nextArticle" @click="emit('goNext')">
-          下一篇 →
+          {{ t('article.nextArticle') }} →
         </button>
       </div>
       <div ref="contentBlockRef" class="content-block" v-html="htmlContent"></div>

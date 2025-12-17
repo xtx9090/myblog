@@ -6,6 +6,7 @@
 
 import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { articles, getArticleById } from '@/data/articles'
 import { useArticleMarkdown } from '@/composables/useArticleMarkdown'
 import { useArticleComments } from '@/composables/useArticleComments'
@@ -16,6 +17,7 @@ import CommentSection from '@/components/article/CommentSection.vue'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 
 // 评论管理
 const { loadComments, getComments, addComment } = useArticleComments()
@@ -142,8 +144,8 @@ onMounted(() => {
 
       <article v-else class="article-card detail-card empty-state">
         <div class="card-body">
-          <h2 class="title">未找到该文章</h2>
-          <p class="description">请返回列表重试</p>
+          <h2 class="title">{{ t('article.notFound') }}</h2>
+          <p class="description">{{ t('article.notFoundDesc') }}</p>
         </div>
       </article>
     </section>

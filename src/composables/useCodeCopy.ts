@@ -3,14 +3,32 @@ import { nextTick, type Ref } from 'vue'
 /**
  * 代码复制功能 Composable
  * 为代码块添加复制按钮并处理复制逻辑
+ * @param contentRef 内容容器的引用
+ * @param t 翻译函数（可选，如果不提供则使用默认文本）
  */
-export const useCodeCopy = (contentRef: Ref<HTMLElement | undefined>) => {
+export const useCodeCopy = (
+  contentRef: Ref<HTMLElement | undefined>,
+  t?: (key: string) => string
+) => {
+  // 默认翻译文本
+  const defaultT = (key: string) => {
+    const defaults: Record<string, string> = {
+      'copy': '复制',
+      'copied': '已复制!',
+      'copyFailed': '复制失败',
+      'copyCode': '复制代码'
+    }
+    return defaults[key] || key
+  }
+  
+  const translate = t || defaultT
+
   /**
    * 显示复制成功反馈
    */
   const showCopySuccess = (button: HTMLElement): void => {
     const originalText = button.textContent
-    button.textContent = '已复制!'
+    button.textContent = translate('copied')
     button.classList.add('copied')
     
     setTimeout(() => {
@@ -24,7 +42,7 @@ export const useCodeCopy = (contentRef: Ref<HTMLElement | undefined>) => {
    */
   const showCopyError = (button: HTMLElement): void => {
     const originalText = button.textContent
-    button.textContent = '复制失败'
+    button.textContent = translate('copyFailed')
     button.classList.add('error')
     
     setTimeout(() => {
@@ -60,9 +78,9 @@ export const useCodeCopy = (contentRef: Ref<HTMLElement | undefined>) => {
   const createCopyButton = (codeText: string): HTMLButtonElement => {
     const copyButton = document.createElement('button')
     copyButton.className = 'copy-code-btn'
-    copyButton.textContent = '复制'
+    copyButton.textContent = translate('copy')
     copyButton.type = 'button'
-    copyButton.setAttribute('aria-label', '复制代码')
+    copyButton.setAttribute('aria-label', translate('copyCode'))
     
     copyButton.addEventListener('click', () => {
       copyToClipboard(codeText, copyButton)

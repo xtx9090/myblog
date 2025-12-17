@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import type { Article } from '@/data/articles'
 
 defineProps<{
@@ -9,13 +10,15 @@ const emit = defineEmits<{
   goBack: []
   edit: []
 }>()
+
+const { t } = useI18n()
 </script>
 
 <template>
   <section class="hero detail-hero">
     <div class="header-actions">
-      <button class="back-btn" type="button" @click="emit('goBack')">← 返回</button>
-      <button v-if="article" class="edit-btn" type="button" @click="emit('edit')">✎ 编辑</button>
+      <button class="back-btn" type="button" @click="emit('goBack')">← {{ t('article.back') }}</button>
+      <button v-if="article" class="edit-btn" type="button" @click="emit('edit')">✎ {{ t('article.edit') }}</button>
     </div>
     <div class="title-area" v-if="article">
       <span class="badge" v-if="article.badge">{{ article.badge }}</span>
@@ -29,8 +32,8 @@ const emit = defineEmits<{
       </p>
     </div>
     <div v-else class="title-area">
-      <h1>未找到该文章</h1>
-      <p class="meta">请返回列表重试</p>
+      <h1>{{ t('article.notFound') }}</h1>
+      <p class="meta">{{ t('article.notFoundDesc') }}</p>
     </div>
   </section>
 </template>

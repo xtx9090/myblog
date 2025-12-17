@@ -145,36 +145,36 @@ const handleSubmit = async () => {
 
       <form class="article-form" @submit.prevent="handleSubmit">
         <div class="form-section">
-          <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'title') }">
+          <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'title') }">
             {{ t('article.title') }}
             <input 
               v-model="form.title" 
               type="text" 
               :placeholder="t('article.titlePlaceholder')"
-              :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'title') }"
+              :class="{ 'form-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'title') }"
             />
           </label>
         </div>
 
         <div class="form-section">
-          <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'description') }">
+          <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'description') }">
             {{ t('article.description') }}
             <textarea
               v-model="form.description"
               rows="3"
               :placeholder="t('article.descriptionPlaceholder')"
-              :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'description') }"
+              :class="{ 'form-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'description') }"
             ></textarea>
           </label>
         </div>
 
         <div class="form-row">
           <div class="form-section">
-            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'category') }">
+            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'category') }">
               {{ t('article.category') }}
               <select 
                 v-model="form.categoryKey"
-                :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'category') }"
+                :class="{ 'form-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'category') }"
               >
                 <option v-for="cat in categories" :key="cat.key" :value="cat.key">
                   {{ cat.label }}
@@ -184,13 +184,13 @@ const handleSubmit = async () => {
           </div>
 
           <div class="form-section">
-            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'tag') }">
+            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'tag') }">
               {{ t('article.tag') }}
               <input 
                 v-model="form.tag" 
                 type="text" 
                 :placeholder="t('article.tagPlaceholder')"
-                :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'tag') }"
+                :class="{ 'form-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'tag') }"
               />
             </label>
           </div>
@@ -198,24 +198,24 @@ const handleSubmit = async () => {
 
         <div class="form-row">
           <div class="form-section">
-            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'date') }">
+            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'date') }">
               {{ t('article.date') }}
               <input 
                 v-model="form.date" 
                 type="date"
-                :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'date') }"
+                :class="{ 'form-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'date') }"
               />
             </label>
           </div>
 
           <div class="form-section">
-            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'platform') }">
+            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'platform') }">
               {{ t('article.platform') }}
               <input 
                 v-model="form.platform" 
                 type="text" 
                 :placeholder="t('article.platformPlaceholder')"
-                :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'platform') }"
+                :class="{ 'form-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'platform') }"
               />
             </label>
           </div>
@@ -230,13 +230,13 @@ const handleSubmit = async () => {
           </div>
 
           <div class="form-section">
-            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'cover') }">
+            <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'cover') }">
               {{ t('article.cover') }}
               <input 
                 v-model="form.cover" 
                 type="text" 
                 :placeholder="t('article.coverPlaceholder')"
-                :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'cover') }"
+                :class="{ 'form-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'cover') }"
               />
             </label>
           </div>
@@ -259,14 +259,14 @@ const handleSubmit = async () => {
         </div>
 
         <div class="form-section">
-          <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some(e => e.field === 'content') }">
+          <label class="form-label" :class="{ 'has-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'content') }">
             {{ t('article.content') }}
             <textarea
               v-model="form.content"
               rows="20"
               :placeholder="t('article.contentPlaceholder')"
               class="content-textarea"
-              :class="{ 'form-error': showErrors && validationErrors.some(e => e.field === 'content') }"
+              :class="{ 'form-error': showErrors && validationErrors.some((e: ValidationError) => e.field === 'content') }"
             ></textarea>
           </label>
           <p class="form-hint">{{ t('article.contentHint') }}</p>

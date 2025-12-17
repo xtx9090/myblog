@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
 type TocItem = {
   id: string
   text: string
@@ -8,11 +10,13 @@ type TocItem = {
 defineProps<{
   toc: TocItem[]
 }>()
+
+const { t } = useI18n()
 </script>
 
 <template>
   <aside v-if="toc.length" class="toc">
-    <div class="toc-title">目录</div>
+    <div class="toc-title">{{ t('toc.title') }}</div>
     <nav>
       <a
         v-for="item in toc"
