@@ -1,0 +1,1 @@
+function r(t){return t?t.startsWith("http://")||t.startsWith("https://")||t.startsWith("data:image/")?{backgroundImage:`url(${t})`,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat"}:{background:t}:{}}export{r as g};
