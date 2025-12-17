@@ -67,18 +67,17 @@ const handleCancel = () => {
       <form class="article-form" @submit.prevent="handleSubmitAndRedirect">
         <div class="form-section">
           <label class="form-label">
-            {{ t('article.title') }} <span class="required">*</span>
-            <input v-model="form.title" type="text" required :placeholder="t('article.titlePlaceholder')" />
+            {{ t('article.title') }}
+            <input v-model="form.title" type="text" :placeholder="t('article.titlePlaceholder')" />
           </label>
         </div>
 
         <div class="form-section">
           <label class="form-label">
-            {{ t('article.description') }} <span class="required">*</span>
+            {{ t('article.description') }}
             <textarea
               v-model="form.description"
               rows="3"
-              required
               :placeholder="t('article.descriptionPlaceholder')"
             ></textarea>
           </label>
@@ -87,8 +86,8 @@ const handleCancel = () => {
         <div class="form-row">
           <div class="form-section">
             <label class="form-label">
-              {{ t('article.category') }} <span class="required">*</span>
-              <select v-model="form.categoryKey" required>
+              {{ t('article.category') }}
+              <select v-model="form.categoryKey">
                 <option v-for="cat in categories" :key="cat.key" :value="cat.key">
                   {{ cat.label }}
                 </option>
@@ -98,8 +97,8 @@ const handleCancel = () => {
 
           <div class="form-section">
             <label class="form-label">
-              {{ t('article.tag') }} <span class="required">*</span>
-              <input v-model="form.tag" type="text" required :placeholder="t('article.tagPlaceholder')" />
+              {{ t('article.tag') }}
+              <input v-model="form.tag" type="text" :placeholder="t('article.tagPlaceholder')" />
             </label>
           </div>
         </div>
@@ -107,15 +106,15 @@ const handleCancel = () => {
         <div class="form-row">
           <div class="form-section">
             <label class="form-label">
-              {{ t('article.date') }} <span class="required">*</span>
-              <input v-model="form.date" type="date" required />
+              {{ t('article.date') }}
+              <input v-model="form.date" type="date" />
             </label>
           </div>
 
           <div class="form-section">
             <label class="form-label">
-              {{ t('article.platform') }} <span class="required">*</span>
-              <input v-model="form.platform" type="text" required :placeholder="t('article.platformPlaceholder')" />
+              {{ t('article.platform') }}
+              <input v-model="form.platform" type="text" :placeholder="t('article.platformPlaceholder')" />
             </label>
           </div>
         </div>
@@ -130,8 +129,8 @@ const handleCancel = () => {
 
           <div class="form-section">
             <label class="form-label">
-              {{ t('article.cover') }} <span class="required">*</span>
-              <input v-model="form.cover" type="text" required :placeholder="t('article.coverPlaceholder')" />
+              {{ t('article.cover') }}
+              <input v-model="form.cover" type="text" :placeholder="t('article.coverPlaceholder')" />
             </label>
           </div>
         </div>
@@ -154,11 +153,10 @@ const handleCancel = () => {
 
         <div class="form-section">
           <label class="form-label">
-            {{ t('article.content') }} <span class="required">*</span>
+            {{ t('article.content') }}
             <textarea
               v-model="form.content"
               rows="20"
-              required
               :placeholder="t('article.contentPlaceholder')"
               class="content-textarea"
             ></textarea>
@@ -223,13 +221,9 @@ const handleCancel = () => {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
   color: var(--text-primary);
-}
-
-.required {
-  color: var(--brand);
 }
 
 .form-label input,
@@ -240,7 +234,7 @@ const handleCancel = () => {
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 16px;
   font-family: inherit;
   transition: border-color 0.2s ease;
   width: 100%;
