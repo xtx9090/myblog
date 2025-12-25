@@ -79,7 +79,8 @@
     "ros": "ros robot",
     "middleware": "middleware | Middleware",
     "apollo": "apollo",
-    "markdown": "markdown"
+    "markdown": "markdown",
+    "deepLearning": "deep learning"
   },
   "search": {
     "placeholder": "Search articles by title, content, tags...",

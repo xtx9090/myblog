@@ -16,7 +16,8 @@ const skills = {
     { name: 'QT/QML', years: null },
     { name: 'ROS', years: null },
     { name: 'Flutter', years: null },
-    { name: 'HTML/JS', years: null }
+    { name: 'HTML/JS', years: null },
+    { name: 'yolo', years: null }
   ],
   protocols: ['Websocket', 'TCP/IP', 'HTTP', 'MQTT', 'RTSP', 'ROS'],
   tools: ['VSCode', 'GDB', 'Valgrind', 'CMake', 'Git', 'Docker', 'CI/CD']
