@@ -12,12 +12,12 @@ const { t } = useI18n()
 const skills = {
   programming: [
     { name: 'C/C++', years: 6 },
-    { name: 'Python', years: null },
-    { name: 'QT/QML', years: null },
-    { name: 'ROS', years: null },
-    { name: 'Flutter', years: null },
-    { name: 'HTML/JS', years: null },
-    { name: 'yolo', years: null }
+    { name: 'Python', years: 13},
+    { name: 'QT/QML', years: 5 },
+    { name: 'ROS', years: 7 },
+    { name: 'Flutter', years: 6 },
+    { name: 'HTML/JS', years: 24 },
+    { name: 'yolo', years: 8 }
   ],
   protocols: ['Websocket', 'TCP/IP', 'HTTP', 'MQTT', 'RTSP', 'ROS'],
   tools: ['VSCode', 'GDB', 'Valgrind', 'CMake', 'Git', 'Docker', 'CI/CD']
